@@ -1,4 +1,4 @@
 window.CHARBAR_SUPABASE_CONFIG = {
-  url: "YOUR_SUPABASE_PROJECT_URL",
-  publishableKey: "YOUR_SUPABASE_PUBLISHABLE_KEY"
+  url: "https://tcjvtejwfwpzcelupzrc.supabase.co",
+  publishableKey: "sb_publishable_R6_uMktaQmoRDqgMpTtgkA_dGgLSsTc"
 };
