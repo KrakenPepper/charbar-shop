@@ -44,7 +44,7 @@ begin
   if length(trim(coalesce(p_customer_name,''))) < 2 then
     raise exception 'Please enter your name.';
   end if;
-  if p_customer_email !~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$' then
+  if p_customer_email !~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$' then
     raise exception 'Please enter a valid email address.';
   end if;
   if length(regexp_replace(coalesce(p_customer_phone,''),'[^0-9]','','g')) < 10 then
