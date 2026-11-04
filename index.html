@@ -17,6 +17,8 @@
 <div class="totals"><div><span>Product subtotal</span><strong id="subtotal">$0.00</strong></div><div><span>Volume discount</span><strong id="discount">$0.00</strong></div><div><span id="shipLabel">Shipping estimate</span><strong id="shipping">$0.00</strong></div><div class="grand"><span>Estimated total</span><strong id="total">$0.00</strong></div></div>
 <button class="checkout" disabled>Checkout coming soon</button><p class="muted">Draft pricing shown for planning: samplers $5 each or 3 for $12; large bottles $8. Draft volume discounts: 5% at $50 and 15% at $100. Shipping and pickup rules require confirmation before launch.</p></section>
 <p class="muted" style="text-align:center;margin-top:28px">CharBar • Kraken Pepper Sauce & Jam</p></main><button class="sticky" onclick="document.querySelector('.summary').scrollIntoView({behavior:'smooth'})"><span id="stickyCount">0</span> items · <span id="stickyTotal">$0.00</span></button>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./supabase-config.js"></script>
 <script>
 const products=[
 {id:'s1',type:'sauce',name:'Blueberry Bandit',desc:'Blueberry + Habanero + Ghost',heat:2,sizes:[['3oz',5],['5oz',8]]},
@@ -36,5 +38,21 @@ function applyFilter(){document.querySelectorAll('.product').forEach(el=>{const 
 function calc(){let subtotal=0,samplers=0,items=0;for(const [key,q] of Object.entries(cart)){items+=q;const size=key.split('_').pop();if(['3oz','4oz'].includes(size))samplers+=q;else subtotal+=q*8}subtotal+=Math.floor(samplers/3)*12+(samplers%3)*5;const discount=subtotal>=100?subtotal*.15:subtotal>=50?subtotal*.05:0;const shipping=fulfillment==='shipping'&&items&&subtotal<50?(items<=3?7.99:items<=6?11.99:14.99):0;const total=subtotal-discount+shipping;document.getElementById('count').textContent=items+' items';document.getElementById('topTotal').textContent=money(total);document.getElementById('stickyCount').textContent=items;document.getElementById('stickyTotal').textContent=money(total);document.getElementById('subtotal').textContent=money(subtotal);document.getElementById('discount').textContent='−'+money(discount);document.getElementById('shipping').textContent=fulfillment==='pickup'?'$0.00':shipping?money(shipping):items?'FREE':'$0.00';document.getElementById('shipLabel').textContent=fulfillment==='pickup'?'Pickup':'Shipping estimate';document.getElementById('total').textContent=money(total)}
 document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));applyFilter()}));
 document.querySelectorAll('[data-fulfillment]').forEach(b=>b.addEventListener('click',()=>{fulfillment=b.dataset.fulfillment;document.querySelectorAll('[data-fulfillment]').forEach(x=>x.classList.toggle('active',x===b));document.getElementById('pickupField').hidden=fulfillment!=='pickup';calc()}));
-render();
+async function checkDatabaseConnection(){
+  const status=document.getElementById('dbStatus');
+  try{
+    const config=window.CHARBAR_SUPABASE_CONFIG;
+    if(!config?.url || !config?.publishableKey) throw new Error('Supabase configuration is missing.');
+    const client=window.supabase.createClient(config.url,config.publishableKey);
+    const {error}=await client.from('products').select('id').limit(1);
+    if(error) throw error;
+    status.textContent='Connected to CharBar database. Catalog and inventory sync are the next setup step.';
+    status.style.borderColor='#276b4d';status.style.color='#9ce5bd';
+  }catch(err){
+    console.error('Supabase connection check:',err);
+    status.textContent='Database connection needs attention: '+(err.message||'unknown error');
+    status.style.borderColor='#79501f';status.style.color='#ffd7a7';
+  }
+}
+render();checkDatabaseConnection();
 </script></body></html>
