@@ -1,29 +1,23 @@
-# Supabase Edge Functions — implementation checklist
+# Supabase Edge Functions
 
-Do not deploy live checkout until these functions are implemented and tested.
+## Deploy the manual-order endpoint
 
-## Required endpoints
+1. Apply `supabase/migrations/202611040001_manual_venmo_cashapp_orders.sql` in the Supabase SQL Editor.
+2. From a local checkout of this repository, install/use the Supabase CLI and link it to project `tcjvtejwfwpzcelupzrc`.
+3. Set the server secret (never put this in GitHub or browser code): `supabase secrets set SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVICE_ROLE_KEY`.
+4. Deploy: `supabase functions deploy create-order --no-verify-jwt`.
+5. Test with a small cart and verify an order appears in the private `orders` and `order_items` tables.
 
-- `create-checkout`: accept cart variant IDs, quantities, customer contact, fulfillment and consent. Reload catalog/prices/stock from the database; never trust client prices. Recompute all discounts, shipping, pickup eligibility and total on the server. Create the provider checkout session.
-- `paypal-webhook`: verify PayPal webhook signature using the configured webhook ID; handle relevant capture-completed and refund events.
-- `stripe-webhook`: verify the Stripe signature against the raw request body; handle `checkout.session.completed`, asynchronous payment success/failure, refunds and disputes as appropriate.
-- `admin-orders`: require authenticated admin authorization for viewing orders, updating fulfillment, tracking numbers, inventory and document access.
-- `send-order-documents`: generate invoice, paid receipt and price-free packing slip after verified payment; store PDFs in a private bucket and send signed/authorized links or attachments.
-- `notify-order`: email store and customer; SMS store alert and optional customer update only with consent.
+The storefront calls `create-order` to create a pending order. The function calculates prices from Supabase, validates stock, and reserves selected units for 24 hours. It does not mark orders paid or deduct physical stock. Expired pending reservations are released when a new order is submitted.
 
-## Required safety properties
+## Current manual payment flow
 
-1. Verify provider webhook signatures.
-2. Record each provider event ID in `payment_events`; reject/replay-ignore duplicate event IDs.
-3. Mark an order paid only after verified provider confirmation.
-4. Deduct stock atomically and exactly once; reject insufficient stock.
-5. Keep Supabase service-role keys and all provider credentials server-side.
-6. Use authenticated admin access and least-privilege policies.
-7. Do not expose customer/order/document tables to anonymous clients.
-8. Use idempotency keys when creating provider checkout sessions.
-9. Validate phone/email/address input and escape all generated document content.
-10. Log provider event IDs and order IDs, but never log secrets or full payment credentials.
+- Venmo: https://venmo.com/u/krakenpepper
+- Cash App: https://cash.app/$krakenpepper
+- Payment is manually verified by the store.
+- For shipping orders, shipping is not included yet; the store must confirm shipping and the final amount before the customer pays.
+- For pickup orders, the displayed amount is the product subtotal; pickup arrangements are confirmed separately.
 
-## Secrets
+## Not production-complete
 
-Set credentials with Supabase project Edge Function secrets. Do not commit real values or place them in `index.html`, client JavaScript, GitHub Actions logs, or this repository.
+No admin order dashboard, secure mark-as-paid action, automated inventory deduction on verified payment, email/SMS notifications, PDF invoices/receipts/packing slips, automatic reservation cleanup schedule, or shipping-rate calculation is included yet. Keep the storefront labelled as an order-request/manual-payment beta until these are implemented and tested. Do not mark an order paid based on a customer screenshot or browser redirect alone; manually verify the payment in the Venmo/Cash App account first.
