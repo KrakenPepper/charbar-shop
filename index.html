@@ -71,8 +71,11 @@ loadCatalog();
 
 document.getElementById('orderForm').addEventListener('submit',async event=>{
  event.preventDefault();
- const errorBox=document.getElementById('orderError'),resultBox=document.getElementById('orderResult'),button=document.getElementById('submitOrder');
- errorBox.textContent='';resultBox.hidden=true;
+ const errorBox=document.getElementById('orderError');
+ const resultBox=document.getElementById('orderResult');
+ const button=document.getElementById('submitOrder');
+ errorBox.textContent='';
+ resultBox.hidden=true;
  const items=Object.entries(cart).filter(([,quantity])=>quantity>0).map(([variant_id,quantity])=>({variant_id,quantity}));
  if(!items.length){errorBox.textContent='Your cart is empty.';return}
  const payload={
@@ -89,22 +92,45 @@ document.getElementById('orderForm').addEventListener('submit',async event=>{
   postal_code:document.getElementById('zip').value.trim()
  };
  if(fulfillment==='shipping'&&(!payload.address1||!payload.city||!payload.state||!payload.postal_code)){errorBox.textContent='Please complete your shipping address.';return}
- button.disabled=true;button.textContent='Submitting…';
+ button.disabled=true;
+ button.textContent='Submitting…';
  try{
+  if(!supabaseClient)throw new Error('The catalog connection is not ready. Refresh and try again.');
   const {data,error}=await supabaseClient.functions.invoke('create-order',{body:payload});
   if(error)throw error;
   if(data?.error)throw new Error(data.error);
-  resultBox.hidden=false;
+  resultBox.replaceChildren();
+  const heading=document.createElement('strong');
+  heading.textContent='Order request received';
+  const number=document.createElement('p');
+  number.textContent='Order number: '+String(data.order_number||'');
+  const amount=document.createElement('p');
+  amount.textContent='Product subtotal: $'+(Number(data.total_cents||0)/100).toFixed(2);
+  const method=document.createElement('p');
   const paymentLabel=payload.payment_method==='venmo'?'Venmo':'Cash App';
-  const amount=(data.total_cents/100).toFixed(2);
-  resultBox.innerHTML='<strong>Order request received</strong><p>Order number: <strong>'+String(data.order_number||'')+'</strong></p><p>Product subtotal: <strong>
-  Object.keys(cart).forEach(k=>delete cart[k]);render();button.textContent='Order request submitted';
- }catch(err){console.error(err);errorBox.textContent=err.message||'Unable to submit your order. Please try again.';button.disabled=false;button.textContent='Submit order request'}
+  method.textContent='Payment method: '+paymentLabel;
+  const note=document.createElement('p');
+  note.textContent=String(data.payment_due_note||'CharBar will send payment instructions.');
+  const link=document.createElement('a');
+  link.href=payload.payment_method==='venmo'?'https://venmo.com/u/krakenpepper':'https://cash.app/$krakenpepper';
+  link.target='_blank';
+  link.rel='noopener noreferrer';
+  link.textContent='Open '+paymentLabel+' payment profile';
+  const linkWrap=document.createElement('p');
+  linkWrap.append(link);
+  const disclaimer=document.createElement('p');
+  disclaimer.className='muted';
+  disclaimer.textContent='Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.';
+  resultBox.append(heading,number,amount,method,note,linkWrap,disclaimer);
+  resultBox.hidden=false;
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  render();
+  button.textContent='Order request submitted';
+ }catch(err){
+  console.error(err);
+  errorBox.textContent=err.message||'Unable to submit your order. Please try again.';
+  button.disabled=false;
+  button.textContent='Submit order request';
+ }
 });
-
-</script></body></html>+amount+'</strong></p><p>Payment method: '+paymentLabel+'</p><p>'+String(data.payment_due_note||'CharBar will send payment instructions.')+'</p><p><a href="'+String(data.payment_url||'#')+'" target="_blank" rel="noopener">Open '+paymentLabel+' payment profile</a></p><p class="muted">Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.</p>';
-  Object.keys(cart).forEach(k=>delete cart[k]);render();button.textContent='Order request submitted';
- }catch(err){console.error(err);errorBox.textContent=err.message||'Unable to submit your order. Please try again.';button.disabled=false;button.textContent='Submit order request'}
-});
-
 </script></body></html>
