@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
     return json({
       order_id: order.order_id,
       order_number: order.order_number,
-      total_cents: order.total_cents,
+      subtotal_cents: order.subtotal_cents,\n      sampler_discount_cents: order.sampler_discount_cents,\n      volume_discount_cents: order.volume_discount_cents,\n      total_cents: order.total_cents,
       payment_method: body.payment_method,
       payment_url: body.payment_method === "venmo"
         ? "https://venmo.com/u/krakenpepper"
