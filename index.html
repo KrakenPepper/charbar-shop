@@ -97,7 +97,12 @@ document.getElementById('orderForm').addEventListener('submit',async event=>{
   resultBox.hidden=false;
   const paymentLabel=payload.payment_method==='venmo'?'Venmo':'Cash App';
   const amount=(data.total_cents/100).toFixed(2);
-  resultBox.innerHTML='<strong>Order request received</strong><p>Order number: <strong>'+data.order_number+'</strong></p><p>Product subtotal: <strong></body></html>+amount+'</strong></p><p>Payment method: '+paymentLabel+'</p><p>'+data.payment_due_note+'</p><p><a href="'+data.payment_url+'" target="_blank" rel="noopener">Open '+paymentLabel+' payment profile</a></p><p class="muted">Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.</p>';
+  resultBox.innerHTML='<strong>Order request received</strong><p>Order number: <strong>'+String(data.order_number||'')+'</strong></p><p>Product subtotal: <strong>
+  Object.keys(cart).forEach(k=>delete cart[k]);render();button.textContent='Order request submitted';
+ }catch(err){console.error(err);errorBox.textContent=err.message||'Unable to submit your order. Please try again.';button.disabled=false;button.textContent='Submit order request'}
+});
+
+</script></body></html>+amount+'</strong></p><p>Payment method: '+paymentLabel+'</p><p>'+String(data.payment_due_note||'CharBar will send payment instructions.')+'</p><p><a href="'+String(data.payment_url||'#')+'" target="_blank" rel="noopener">Open '+paymentLabel+' payment profile</a></p><p class="muted">Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.</p>';
   Object.keys(cart).forEach(k=>delete cart[k]);render();button.textContent='Order request submitted';
  }catch(err){console.error(err);errorBox.textContent=err.message||'Unable to submit your order. Please try again.';button.disabled=false;button.textContent='Submit order request'}
 });
