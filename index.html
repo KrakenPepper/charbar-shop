@@ -5,42 +5,52 @@
 <meta name="description" content="Shop small-batch Kraken hot sauces and pepper jams from CharBar.">
 <meta name="theme-color" content="#101012"><title>CharBar — Small Batch, Big Flavor</title>
 <style>
-:root{color-scheme:dark;--bg:#101012;--card:#1b1b20;--line:#33333b;--text:#f7f5f1;--muted:#aaa8b0;--accent:#f28a32;--green:#45c58b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:760px;margin:auto;padding:22px 15px 110px}header{text-align:center;padding:22px 0 18px}h1{font-size:34px;letter-spacing:.16em;margin:0}header p{color:var(--muted);margin:4px 0}.notice{margin:14px 0;padding:12px 14px;border:1px solid #79501f;background:#3a2817;border-radius:10px;color:#ffd7a7;font-size:13px}.bar{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px;color:var(--muted);font-size:14px}.filters{display:flex;gap:8px;overflow:auto;padding:4px 0 12px}.filters button,.size button,.step button{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:20px;padding:9px 13px;white-space:nowrap}.filters button.active{background:var(--text);color:var(--bg)}h2{font-size:18px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:8px;margin:24px 0 12px}.grid{display:grid;gap:11px}.product,.summary{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:15px}.product-top{display:flex;justify-content:space-between;gap:10px}.product h3{font-size:16px;margin:0}.heat{font-size:11px;color:#ffd19a;white-space:nowrap}.desc{color:var(--muted);font-size:13px;margin:6px 0 10px}.size{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:10px 0 0;margin-top:8px;font-size:14px}.step{display:flex;align-items:center;gap:10px}.step button{width:34px;height:34px;padding:0;border-radius:8px;font-size:19px}.step button:disabled{opacity:.3}.qty{min-width:18px;text-align:center}.summary{margin-top:20px}.summary h2{margin-top:0}.choice{display:flex;gap:8px}.choice button{flex:1;padding:12px;border:1px solid var(--line);border-radius:9px;background:#222228;color:var(--text)}.choice button.active{border-color:var(--accent);background:#4a2c18}.field{margin-top:13px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;background:#111115;color:var(--text)}.totals div{display:flex;justify-content:space-between;margin:9px 0;color:var(--muted)}.totals .grand{border-top:1px solid var(--line);padding-top:12px;color:var(--text);font-size:19px;font-weight:800}.checkout{width:100%;padding:14px;margin-top:14px;border:0;border-radius:10px;background:#555;color:#ddd;font-weight:800}.muted{color:var(--muted);font-size:12px}.sticky{position:fixed;bottom:14px;right:14px;background:var(--accent);color:#17100a;padding:12px 16px;border:0;border-radius:28px;font-weight:800;box-shadow:0 4px 20px #0008}@media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
+:root{color-scheme:dark;--bg:#101012;--card:#1b1b20;--line:#33333b;--text:#f7f5f1;--muted:#aaa8b0;--accent:#f28a32;--green:#45c58b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:760px;margin:auto;padding:22px 15px 110px}header{text-align:center;padding:22px 0 18px}h1{font-size:34px;letter-spacing:.16em;margin:0}header p{color:var(--muted);margin:4px 0}.notice{margin:14px 0;padding:12px 14px;border:1px solid #79501f;background:#3a2817;border-radius:10px;color:#ffd7a7;font-size:13px}.bar{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px;color:var(--muted);font-size:14px}.filters{display:flex;gap:8px;overflow:auto;padding:4px 0 12px}.filters button,.size button,.step button{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:20px;padding:9px 13px;white-space:nowrap}.filters button.active{background:var(--text);color:var(--bg)}h2{font-size:18px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:8px;margin:24px 0 12px}.grid{display:grid;gap:11px}.product,.summary{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:15px}.product-top{display:flex;justify-content:space-between;gap:10px}.product h3{font-size:16px;margin:0}.heat{font-size:11px;color:#ffd19a;white-space:nowrap}.desc{color:var(--muted);font-size:13px;margin:6px 0 10px}.size{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:10px 0 0;margin-top:8px;font-size:14px}.step{display:flex;align-items:center;gap:10px}.step button{width:34px;height:34px;padding:0;border-radius:8px;font-size:19px}.step button:disabled{opacity:.3}.qty{min-width:18px;text-align:center}.summary{margin-top:20px}.summary h2{margin-top:0}.choice{display:flex;gap:8px}.choice button{flex:1;padding:12px;border:1px solid var(--line);border-radius:9px;background:#222228;color:var(--text)}.choice button.active{border-color:var(--accent);background:#4a2c18}.field{margin-top:13px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;background:#111115;color:var(--text)}.totals div{display:flex;justify-content:space-between;margin:9px 0;color:var(--muted)}.totals .grand{border-top:1px solid var(--line);padding-top:12px;color:var(--text);font-size:19px;font-weight:800}.checkout{width:100%;padding:14px;margin-top:14px;border:0;border-radius:10px;background:#555;color:#ddd;font-weight:800}.muted{color:var(--muted);font-size:12px}.order-form{border-top:1px solid var(--line);margin-top:16px;padding-top:12px}.order-form h3{font-size:15px;margin:14px 0 6px}.order-form .field{margin-top:10px}.pay-choice{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pay-choice label{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:12px;background:#111115;color:var(--text)}.pay-choice input{accent-color:var(--accent)}.checkout:not(:disabled){background:var(--accent);color:#17100a;cursor:pointer}.checkout:disabled{opacity:.55}.order-result{margin-top:14px;padding:14px;border:1px solid #276b4d;border-radius:10px;background:#14251d}.order-result a{color:#ffd19a;font-weight:700}.error{color:#ffb3a8}.sticky{position:fixed;bottom:14px;right:14px;background:var(--accent);color:#17100a;padding:12px 16px;border:0;border-radius:28px;font-weight:800;box-shadow:0 4px 20px #0008}@media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
 </style></head>
 <body><main><header><h1>CHARBAR</h1><p>SMALL BATCH • BIG FLAVOR</p><p class="muted">KRAKEN HOT SAUCE & PEPPER JAM</p></header>
-<div class="notice"><strong>Store preview:</strong> online checkout is not active yet. You can explore the menu and build a cart, but no order or payment will be submitted.</div>
+<div class="notice"><strong>Order requests:</strong> submit your cart and choose Venmo or Cash App. Payment is manual and your order is not confirmed until CharBar verifies payment. Shipping cost, if applicable, will be confirmed separately before you pay.</div>
 <div id="dbStatus" class="connection" role="status">Checking Supabase connection…</div>
 <div class="bar"><span id="count">0 items</span><strong id="topTotal">$0.00</strong></div>
 <nav class="filters" aria-label="Heat level filters"><button class="active" data-filter="all">All flavors</button><button data-filter="mild">Mild</button><button data-filter="medium">Medium</button><button data-filter="hot">Hot</button></nav>
 <h2>Kraken Hot Sauces</h2><div class="grid" id="sauces"></div><h2>Kraken Pepper Jams</h2><div class="grid" id="jams"></div>
-<section class="summary"><h2>Your Cart</h2><div class="choice"><button class="active" data-fulfillment="shipping">Shipping</button><button data-fulfillment="pickup">Local pickup (CT)</button></div>
-<div class="field"><label for="zip">ZIP code</label><input id="zip" inputmode="numeric" maxlength="5" placeholder="5-digit ZIP code"></div><div class="field" id="pickupField" hidden><label for="pickup">Pickup location (draft options)</label><select id="pickup"><option>Hartford, CT</option><option>Plainville, CT</option></select></div>
-<div class="totals"><div><span>Product subtotal</span><strong id="subtotal">$0.00</strong></div><div><span>Volume discount</span><strong id="discount">$0.00</strong></div><div><span id="shipLabel">Shipping estimate</span><strong id="shipping">$0.00</strong></div><div class="grand"><span>Estimated total</span><strong id="total">$0.00</strong></div></div>
-<button class="checkout" disabled>Checkout coming soon</button><p class="muted">Draft pricing shown for planning: samplers $5 each or 3 for $12; large bottles $8. Draft volume discounts: 5% at $50 and 15% at $100. Shipping and pickup rules require confirmation before launch.</p></section>
+<section class="summary"><h2>Your Cart</h2><div class="choice"><button class="active" data-fulfillment="shipping" type="button">Shipping</button><button data-fulfillment="pickup" type="button">Local pickup (CT)</button></div>
+<div class="field" id="zipField"><label for="zip">ZIP code</label><input id="zip" inputmode="numeric" maxlength="10" placeholder="ZIP code"></div>
+<div class="field" id="pickupField" hidden><label for="pickup">Pickup location</label><select id="pickup"><option value="Hartford, CT">Hartford, CT</option><option value="Plainville, CT">Plainville, CT</option></select><p class="muted">Pickup location options are provisional and will be confirmed by CharBar.</p></div>
+<div class="totals"><div><span>Product subtotal</span><strong id="subtotal">$0.00</strong></div><div><span>Shipping</span><strong id="shipping">Confirmed separately</strong></div><div class="grand"><span>Product total due</span><strong id="total">$0.00</strong></div></div>
+<form id="orderForm" class="order-form">
+<h3>Contact information</h3>
+<div class="field"><label for="customerName">Full name *</label><input id="customerName" autocomplete="name" required maxlength="120"></div>
+<div class="field"><label for="customerEmail">Email *</label><input id="customerEmail" type="email" autocomplete="email" required maxlength="254"></div>
+<div class="field"><label for="customerPhone">Phone *</label><input id="customerPhone" type="tel" autocomplete="tel" required maxlength="30"></div>
+<div id="shippingFields"><h3>Shipping address</h3><div class="field"><label for="address1">Street address *</label><input id="address1" autocomplete="address-line1" maxlength="160"></div><div class="field"><label for="address2">Apartment / unit</label><input id="address2" autocomplete="address-line2" maxlength="100"></div><div class="field"><label for="city">City *</label><input id="city" autocomplete="address-level2" maxlength="100"></div><div class="field"><label for="state">State *</label><input id="state" autocomplete="address-level1" maxlength="2" placeholder="CT"></div></div>
+<h3>Choose payment method</h3><div class="pay-choice"><label><input type="radio" name="paymentMethod" value="venmo" checked> Venmo</label><label><input type="radio" name="paymentMethod" value="cashapp"> Cash App</label></div>
+<button class="checkout" id="submitOrder" type="submit" disabled>Submit order request</button>
+<p class="muted">Submitting reserves the selected inventory for up to 24 hours. No payment is collected on this website. Please wait for the order confirmation and payment instructions.</p>
+<div id="orderResult" class="order-result" hidden aria-live="polite"></div>
+<div id="orderError" class="error muted" role="alert"></div>
+</form></section>
 <p class="muted" style="text-align:center;margin-top:28px">CharBar • Kraken Pepper Sauce & Jam</p></main><button class="sticky" onclick="document.querySelector('.summary').scrollIntoView({behavior:'smooth'})"><span id="stickyCount">0</span> items · <span id="stickyTotal">$0.00</span></button>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./supabase-config.js"></script>
 <script>
-let products=[];const cart={};let fulfillment='shipping',filter='all',supabaseClient=null;const money=n=>'$'+n.toFixed(2);
+let products=[];const cart={};let fulfillment='shipping',filter='all',supabaseClient=null,catalogReady=false;const money=n=>'$'+n.toFixed(2);
 function render(){
  for(const type of ['sauce','jam']){
   const target=document.getElementById(type==='sauce'?'sauces':'jams');
-  target.innerHTML=products.filter(p=>p.type===type).map(p=>'<article class="product" data-heat="'+p.heat+'"><div class="product-top"><h3>KRAKEN '+p.name+'</h3><span class="heat">'+['Mild','Mild','Medium','Hot'][p.heat]+'</span></div><p class="desc">'+p.desc+'</p>'+p.variants.map(v=>{const key=v.id,q=cart[key]||0,stock=Math.max(0,v.stock_quantity);return '<div class="size"><span>'+v.size_label+' · '+money(v.unit_price_cents/100)+' <small class="muted">('+stock+' available)</small></span><div class="step"><button aria-label="Remove one" onclick="change(\''+key+'\',-1)" '+(!q?'disabled':'')+'>−</button><span class="qty">'+q+'</span><button aria-label="Add one" onclick="change(\''+key+'\',1)" '+(q>=stock||!stock?'disabled':'')+'>+</button></div></div>'}).join('')+'</article>').join('');
+  target.innerHTML=products.filter(p=>p.type===type).map(p=>'<article class="product" data-heat="'+p.heat+'"><div class="product-top"><h3>KRAKEN '+p.name+'</h3><span class="heat">'+['Mild','Mild','Medium','Hot'][p.heat]+'</span></div><p class="desc">'+p.desc+'</p>'+p.variants.map(v=>{const key=v.id,q=cart[key]||0,stock=Math.max(0,v.stock_quantity-(v.reserved_quantity||0));return '<div class="size"><span>'+v.size_label+' · '+money(v.unit_price_cents/100)+' <small class="muted">('+stock+' available)</small></span><div class="step"><button aria-label="Remove one" onclick="change(\''+key+'\',-1)" '+(!q?'disabled':'')+'>−</button><span class="qty">'+q+'</span><button aria-label="Add one" onclick="change(\''+key+'\',1)" '+(q>=stock||!stock?'disabled':'')+'>+</button></div></div>'}).join('')+'</article>').join('');
  }
  applyFilter();calc();
 }
 function change(key,d){const v=products.flatMap(p=>p.variants).find(x=>x.id===key);if(!v)return;const q=Math.max(0,Math.min(v.stock_quantity,(cart[key]||0)+d));if(q)cart[key]=q;else delete cart[key];render()}
 function applyFilter(){document.querySelectorAll('.product').forEach(el=>{const h=Number(el.dataset.heat);el.hidden=filter==='mild'?h>1:filter==='medium'?h!==2:filter==='hot'?h!==3:false})}
 function calc(){
- let subtotal=0,items=0,samplers=0;
- for(const [key,q] of Object.entries(cart)){const v=products.flatMap(p=>p.variants).find(x=>x.id===key);if(!v)continue;items+=q;const price=v.unit_price_cents/100;if(['3oz','4oz'].includes(v.size_label)){samplers+=q;subtotal+=q*price}else subtotal+=q*price}
- subtotal-=Math.floor(samplers/3)*3;
- const discount=subtotal>=100?subtotal*.15:subtotal>=50?subtotal*.05:0;
- const shipping=fulfillment==='shipping'&&items&&subtotal<50?(items<=3?7.99:items<=6?11.99:14.99):0,total=subtotal-discount+shipping;
- document.getElementById('count').textContent=items+' items';document.getElementById('topTotal').textContent=money(total);document.getElementById('stickyCount').textContent=items;document.getElementById('stickyTotal').textContent=money(total);document.getElementById('subtotal').textContent=money(subtotal);document.getElementById('discount').textContent='−'+money(discount);document.getElementById('shipping').textContent=fulfillment==='pickup'?'$0.00':shipping?money(shipping):items?'FREE':'$0.00';document.getElementById('shipLabel').textContent=fulfillment==='pickup'?'Pickup':'Shipping estimate';document.getElementById('total').textContent=money(total)
+ let subtotal=0,items=0;
+ for(const [key,q] of Object.entries(cart)){const v=products.flatMap(p=>p.variants).find(x=>x.id===key);if(!v)continue;items+=q;const price=v.unit_price_cents/100;subtotal+=q*price}
+ const total=subtotal;
+ document.getElementById('count').textContent=items+' items';document.getElementById('topTotal').textContent=money(total);document.getElementById('stickyCount').textContent=items;document.getElementById('stickyTotal').textContent=money(total);document.getElementById('subtotal').textContent=money(subtotal);document.getElementById('shipping').textContent=fulfillment==='pickup'?'$0.00':'Confirmed separately';document.getElementById('total').textContent=money(total);const submit=document.getElementById('submitOrder');if(submit)submit.disabled=!catalogReady||items===0
 }
 document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));applyFilter()}));
-document.querySelectorAll('[data-fulfillment]').forEach(b=>b.addEventListener('click',()=>{fulfillment=b.dataset.fulfillment;document.querySelectorAll('[data-fulfillment]').forEach(x=>x.classList.toggle('active',x===b));document.getElementById('pickupField').hidden=fulfillment!=='pickup';calc()}));
+document.querySelectorAll('[data-fulfillment]').forEach(b=>b.addEventListener('click',()=>{fulfillment=b.dataset.fulfillment;document.querySelectorAll('[data-fulfillment]').forEach(x=>x.classList.toggle('active',x===b));document.getElementById('pickupField').hidden=fulfillment!=='pickup';document.getElementById('shippingFields').hidden=fulfillment!=='shipping';document.getElementById('zipField').hidden=fulfillment!=='shipping';calc()}));
 async function loadCatalog(){
  const status=document.getElementById('dbStatus');
  try{
@@ -48,15 +58,48 @@ async function loadCatalog(){
   if(!config?.url||!config?.publishableKey)throw new Error('Supabase configuration is missing.');
   if(!window.supabase?.createClient)throw new Error('Supabase client library did not load.');
   supabaseClient=window.supabase.createClient(config.url,config.publishableKey);
-  const {data,error}=await supabaseClient.from('products').select('id,name,product_type,description,heat_level,active,product_variants(id,size_label,unit_price_cents,stock_quantity,active)').eq('active',true).order('name');
+  const {data,error}=await supabaseClient.from('products').select('id,name,product_type,description,heat_level,active,product_variants(id,size_label,unit_price_cents,stock_quantity,reserved_quantity,active)').eq('active',true).order('name');
   if(error)throw error;
   products=(data||[]).map(p=>({id:p.id,name:p.name,type:p.product_type,desc:p.description,heat:p.heat_level,variants:(p.product_variants||[]).filter(v=>v.active)})).filter(p=>p.variants.length);
   if(!products.length)throw new Error('No active products found. Please confirm the catalog seed query ran successfully.');
-  render();
+  catalogReady=true;render();
   status.textContent='Connected · '+products.length+' products · '+products.reduce((n,p)=>n+p.variants.length,0)+' SKUs loaded from live inventory.';
   status.style.cssText+=';border:1px solid #276b4d;border-radius:9px;padding:10px;color:#9ce5bd';
  }catch(err){console.error(err);status.textContent='Database/catalog error: '+(err.message||'unknown error');status.style.cssText+=';border:1px solid #79501f;border-radius:9px;padding:10px;color:#ffd7a7'}
 }
 loadCatalog();
+
+document.getElementById('orderForm').addEventListener('submit',async event=>{
+ event.preventDefault();
+ const errorBox=document.getElementById('orderError'),resultBox=document.getElementById('orderResult'),button=document.getElementById('submitOrder');
+ errorBox.textContent='';resultBox.hidden=true;
+ const items=Object.entries(cart).filter(([,quantity])=>quantity>0).map(([variant_id,quantity])=>({variant_id,quantity}));
+ if(!items.length){errorBox.textContent='Your cart is empty.';return}
+ const payload={
+  customer_name:document.getElementById('customerName').value.trim(),
+  customer_email:document.getElementById('customerEmail').value.trim(),
+  customer_phone:document.getElementById('customerPhone').value.trim(),
+  fulfillment_method:fulfillment,
+  payment_method:document.querySelector('input[name="paymentMethod"]:checked').value,
+  items,
+  address1:document.getElementById('address1').value.trim(),
+  address2:document.getElementById('address2').value.trim(),
+  city:document.getElementById('city').value.trim(),
+  state:document.getElementById('state').value.trim().toUpperCase(),
+  postal_code:document.getElementById('zip').value.trim()
+ };
+ if(fulfillment==='shipping'&&(!payload.address1||!payload.city||!payload.state||!payload.postal_code)){errorBox.textContent='Please complete your shipping address.';return}
+ button.disabled=true;button.textContent='Submitting…';
+ try{
+  const {data,error}=await supabaseClient.functions.invoke('create-order',{body:payload});
+  if(error)throw error;
+  if(data?.error)throw new Error(data.error);
+  resultBox.hidden=false;
+  const paymentLabel=payload.payment_method==='venmo'?'Venmo':'Cash App';
+  const amount=(data.total_cents/100).toFixed(2);
+  resultBox.innerHTML='<strong>Order request received</strong><p>Order number: <strong>'+data.order_number+'</strong></p><p>Product subtotal: <strong></body></html>+amount+'</strong></p><p>Payment method: '+paymentLabel+'</p><p>'+data.payment_due_note+'</p><p><a href="'+data.payment_url+'" target="_blank" rel="noopener">Open '+paymentLabel+' payment profile</a></p><p class="muted">Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.</p>';
+  Object.keys(cart).forEach(k=>delete cart[k]);render();button.textContent='Order request submitted';
+ }catch(err){console.error(err);errorBox.textContent=err.message||'Unable to submit your order. Please try again.';button.disabled=false;button.textContent='Submit order request'}
+});
 
 </script></body></html>
