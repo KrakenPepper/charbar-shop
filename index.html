@@ -21,39 +21,42 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./supabase-config.js"></script>
 <script>
-const products=[
-{id:'s1',type:'sauce',name:'Blueberry Bandit',desc:'Blueberry + Habanero + Ghost',heat:2,sizes:[['3oz',5],['5oz',8]]},
-{id:'s2',type:'sauce',name:'Tropical Punch',desc:'Pineapple + Mango + Habanero + Ghost',heat:1,sizes:[['3oz',5],['5oz',8]]},
-{id:'s3',type:'sauce',name:'Peach Tsunami',desc:'Peach + Habanero + Ghost',heat:3,sizes:[['3oz',5],['5oz',8]]},
-{id:'s4',type:'sauce',name:'Mermaid Moss',desc:'Green Chile + Garlic + Ghost',heat:2,sizes:[['3oz',5],['5oz',8]]},
-{id:'j1',type:'jam',name:'Spicy Apple Pie',desc:'Apple profile spice spread',heat:3,sizes:[['4oz',5],['8oz',8]]},
-{id:'j2',type:'jam',name:'Peach Mango',desc:'Sweet heat fruit fusion',heat:1,sizes:[['4oz',5],['8oz',8]]},
-{id:'j3',type:'jam',name:'Pineapple Mango',desc:'Tropical pepper jam zest',heat:2,sizes:[['4oz',5],['8oz',8]]},
-{id:'j4',type:'jam',name:'Strawberry',desc:'Classic mild sweet glaze',heat:0,sizes:[['4oz',5],['8oz',8]]},
-{id:'j5',type:'jam',name:'Cranberry',desc:'Holiday special reserve',heat:1,sizes:[['4oz',5],['8oz',8]]}
-];
-const cart={};let fulfillment='shipping',filter='all';const money=n=>'$'+n.toFixed(2);
-function render(){for(const type of ['sauce','jam'])document.getElementById(type==='sauce'?'sauces':'jams').innerHTML=products.filter(p=>p.type===type).map(p=>'<article class="product" data-heat="'+p.heat+'"><div class="product-top"><h3>KRAKEN '+p.name+'</h3><span class="heat">'+['Mild','Mild','Medium','Hot'][p.heat]+'</span></div><p class="desc">'+p.desc+'</p>'+p.sizes.map(([size,price])=>{const key=p.id+'_'+size,q=cart[key]||0;return '<div class="size"><span>'+size+' · '+money(price)+'</span><div class="step"><button aria-label="Remove one" onclick="change(\''+key+'\',-1)" '+(q===0?'disabled':'')+'>−</button><span class="qty">'+q+'</span><button aria-label="Add one" onclick="change(\''+key+'\',1)">+</button></div></div>'}).join('')+'</article>').join('');applyFilter();calc()}
-function change(key,d){cart[key]=Math.max(0,(cart[key]||0)+d);if(!cart[key])delete cart[key];render()}
-function applyFilter(){document.querySelectorAll('.product').forEach(el=>{const h=Number(el.dataset.heat);el.hidden=filter==='mild'?h<0||h>1:filter==='medium'?h!==2:filter==='hot'?h!==3:false})}
-function calc(){let subtotal=0,samplers=0,items=0;for(const [key,q] of Object.entries(cart)){items+=q;const size=key.split('_').pop();if(['3oz','4oz'].includes(size))samplers+=q;else subtotal+=q*8}subtotal+=Math.floor(samplers/3)*12+(samplers%3)*5;const discount=subtotal>=100?subtotal*.15:subtotal>=50?subtotal*.05:0;const shipping=fulfillment==='shipping'&&items&&subtotal<50?(items<=3?7.99:items<=6?11.99:14.99):0;const total=subtotal-discount+shipping;document.getElementById('count').textContent=items+' items';document.getElementById('topTotal').textContent=money(total);document.getElementById('stickyCount').textContent=items;document.getElementById('stickyTotal').textContent=money(total);document.getElementById('subtotal').textContent=money(subtotal);document.getElementById('discount').textContent='−'+money(discount);document.getElementById('shipping').textContent=fulfillment==='pickup'?'$0.00':shipping?money(shipping):items?'FREE':'$0.00';document.getElementById('shipLabel').textContent=fulfillment==='pickup'?'Pickup':'Shipping estimate';document.getElementById('total').textContent=money(total)}
+let products=[];const cart={};let fulfillment='shipping',filter='all',supabaseClient=null;const money=n=>'$'+n.toFixed(2);
+function render(){
+ for(const type of ['sauce','jam']){
+  const target=document.getElementById(type==='sauce'?'sauces':'jams');
+  target.innerHTML=products.filter(p=>p.type===type).map(p=>'<article class="product" data-heat="'+p.heat+'"><div class="product-top"><h3>KRAKEN '+p.name+'</h3><span class="heat">'+['Mild','Mild','Medium','Hot'][p.heat]+'</span></div><p class="desc">'+p.desc+'</p>'+p.variants.map(v=>{const key=v.id,q=cart[key]||0,stock=Math.max(0,v.stock_quantity);return '<div class="size"><span>'+v.size_label+' · '+money(v.unit_price_cents/100)+' <small class="muted">('+stock+' available)</small></span><div class="step"><button aria-label="Remove one" onclick="change(\''+key+'\',-1)" '+(!q?'disabled':'')+'>−</button><span class="qty">'+q+'</span><button aria-label="Add one" onclick="change(\''+key+'\',1)" '+(q>=stock||!stock?'disabled':'')+'>+</button></div></div>'}).join('')+'</article>').join('');
+ }
+ applyFilter();calc();
+}
+function change(key,d){const v=products.flatMap(p=>p.variants).find(x=>x.id===key);if(!v)return;const q=Math.max(0,Math.min(v.stock_quantity,(cart[key]||0)+d));if(q)cart[key]=q;else delete cart[key];render()}
+function applyFilter(){document.querySelectorAll('.product').forEach(el=>{const h=Number(el.dataset.heat);el.hidden=filter==='mild'?h>1:filter==='medium'?h!==2:filter==='hot'?h!==3:false})}
+function calc(){
+ let subtotal=0,items=0,samplers=0;
+ for(const [key,q] of Object.entries(cart)){const v=products.flatMap(p=>p.variants).find(x=>x.id===key);if(!v)continue;items+=q;const price=v.unit_price_cents/100;if(['3oz','4oz'].includes(v.size_label)){samplers+=q;subtotal+=q*price}else subtotal+=q*price}
+ subtotal-=Math.floor(samplers/3)*3;
+ const discount=subtotal>=100?subtotal*.15:subtotal>=50?subtotal*.05:0;
+ const shipping=fulfillment==='shipping'&&items&&subtotal<50?(items<=3?7.99:items<=6?11.99:14.99):0,total=subtotal-discount+shipping;
+ document.getElementById('count').textContent=items+' items';document.getElementById('topTotal').textContent=money(total);document.getElementById('stickyCount').textContent=items;document.getElementById('stickyTotal').textContent=money(total);document.getElementById('subtotal').textContent=money(subtotal);document.getElementById('discount').textContent='−'+money(discount);document.getElementById('shipping').textContent=fulfillment==='pickup'?'$0.00':shipping?money(shipping):items?'FREE':'$0.00';document.getElementById('shipLabel').textContent=fulfillment==='pickup'?'Pickup':'Shipping estimate';document.getElementById('total').textContent=money(total)
+}
 document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));applyFilter()}));
 document.querySelectorAll('[data-fulfillment]').forEach(b=>b.addEventListener('click',()=>{fulfillment=b.dataset.fulfillment;document.querySelectorAll('[data-fulfillment]').forEach(x=>x.classList.toggle('active',x===b));document.getElementById('pickupField').hidden=fulfillment!=='pickup';calc()}));
-async function checkDatabaseConnection(){
-  const status=document.getElementById('dbStatus');
-  try{
-    const config=window.CHARBAR_SUPABASE_CONFIG;
-    if(!config?.url || !config?.publishableKey) throw new Error('Supabase configuration is missing.');
-    const client=window.supabase.createClient(config.url,config.publishableKey);
-    const {error}=await client.from('products').select('id').limit(1);
-    if(error) throw error;
-    status.textContent='Connected to CharBar database. Catalog and inventory sync are the next setup step.';
-    status.style.borderColor='#276b4d';status.style.color='#9ce5bd';
-  }catch(err){
-    console.error('Supabase connection check:',err);
-    status.textContent='Database connection needs attention: '+(err.message||'unknown error');
-    status.style.borderColor='#79501f';status.style.color='#ffd7a7';
-  }
+async function loadCatalog(){
+ const status=document.getElementById('dbStatus');
+ try{
+  const config=window.CHARBAR_SUPABASE_CONFIG;
+  if(!config?.url||!config?.publishableKey)throw new Error('Supabase configuration is missing.');
+  if(!window.supabase?.createClient)throw new Error('Supabase client library did not load.');
+  supabaseClient=window.supabase.createClient(config.url,config.publishableKey);
+  const {data,error}=await supabaseClient.from('products').select('id,name,product_type,description,heat_level,active,product_variants(id,size_label,unit_price_cents,stock_quantity,active)').eq('active',true).order('name');
+  if(error)throw error;
+  products=(data||[]).map(p=>({id:p.id,name:p.name,type:p.product_type,desc:p.description,heat:p.heat_level,variants:(p.product_variants||[]).filter(v=>v.active)})).filter(p=>p.variants.length);
+  if(!products.length)throw new Error('No active products found. Please confirm the catalog seed query ran successfully.');
+  render();
+  status.textContent='Connected · '+products.length+' products · '+products.reduce((n,p)=>n+p.variants.length,0)+' SKUs loaded from live inventory.';
+  status.style.cssText+=';border:1px solid #276b4d;border-radius:9px;padding:10px;color:#9ce5bd';
+ }catch(err){console.error(err);status.textContent='Database/catalog error: '+(err.message||'unknown error');status.style.cssText+=';border:1px solid #79501f;border-radius:9px;padding:10px;color:#ffd7a7'}
 }
-render();checkDatabaseConnection();
+loadCatalog();
+
 </script></body></html>
