@@ -38,7 +38,7 @@ declare
   v_after_sampler integer;
 begin
   if length(trim(coalesce(p_customer_name,''))) < 2 then raise exception 'Please enter your name.'; end if;
-  if p_customer_email !~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$' then raise exception 'Please enter a valid email address.'; end if;
+  if p_customer_email !~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$' then raise exception 'Please enter a valid email address.'; end if;
   if length(regexp_replace(coalesce(p_customer_phone,''),'[^0-9]','','g')) < 10 then raise exception 'Please enter a valid phone number.'; end if;
   if p_fulfillment_method not in ('shipping','pickup') then raise exception 'Invalid fulfillment method.'; end if;
   if p_payment_method not in ('venmo','cashapp') then raise exception 'Invalid payment method.'; end if;
