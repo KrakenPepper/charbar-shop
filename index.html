@@ -16,7 +16,7 @@
 <section class="summary"><h2>Your Cart</h2><div class="choice"><button class="active" data-fulfillment="shipping" type="button">Shipping</button><button data-fulfillment="pickup" type="button">Local pickup (CT)</button></div>
 <div class="field" id="zipField"><label for="zip">ZIP code</label><input id="zip" inputmode="numeric" maxlength="10" placeholder="ZIP code"></div>
 <div class="field" id="pickupField" hidden><label for="pickup">Pickup location</label><select id="pickup"><option value="Hartford, CT">Hartford, CT</option><option value="Plainville, CT">Plainville, CT</option></select><p class="muted">Pickup location options are provisional and will be confirmed by CharBar.</p></div>
-<div class="totals"><div><span>Product subtotal</span><strong id="subtotal">$0.00</strong></div><div><span>Shipping</span><strong id="shipping">Confirmed separately</strong></div><div class="grand"><span>Product total due</span><strong id="total">$0.00</strong></div></div>
+<div class="totals"><div><span>Items before sampler deal</span><strong id="grossSubtotal">$0.00</strong></div><div><span>3-for-$12 sampler savings</span><strong id="samplerSavings">−$0.00</strong></div><div><span>Subtotal after sampler deal</span><strong id="subtotal">$0.00</strong></div><div><span>Automatic order discount</span><strong id="volumeSavings">−$0.00</strong></div><div><span>Shipping</span><strong id="shipping">Confirmed separately</strong></div><div class="grand"><span>Product total due</span><strong id="total">$0.00</strong></div></div>
 <form id="orderForm" class="order-form">
 <h3>Contact information</h3>
 <div class="field"><label for="customerName">Full name *</label><input id="customerName" autocomplete="name" required maxlength="120"></div>
@@ -43,11 +43,30 @@ function render(){
 }
 function change(key,d){const v=products.flatMap(p=>p.variants).find(x=>x.id===key);if(!v)return;const q=Math.max(0,Math.min(v.stock_quantity,(cart[key]||0)+d));if(q)cart[key]=q;else delete cart[key];render()}
 function applyFilter(){document.querySelectorAll('.product').forEach(el=>{const h=Number(el.dataset.heat);el.hidden=filter==='mild'?h>1:filter==='medium'?h!==2:filter==='hot'?h!==3:false})}
+function calculatePricing(){
+ let grossCents=0,items=0,samplerQty=0;
+ for(const [key,q] of Object.entries(cart)){
+  const product=products.find(p=>p.variants.some(v=>v.id===key));const v=product?.variants.find(x=>x.id===key);if(!v)continue;
+  items+=q;grossCents+=q*v.unit_price_cents;
+  if((product.type==='sauce'&&v.size_label.trim().toLowerCase()==='3oz')||(product.type==='jam'&&v.size_label.trim().toLowerCase()==='4oz'))samplerQty+=q;
+ }
+ const samplerSavingsCents=Math.floor(samplerQty/3)*300;
+ const afterSamplerCents=grossCents-samplerSavingsCents;
+ const volumeRate=afterSamplerCents>10000?0.15:afterSamplerCents>5000?0.05:0;
+ const volumeSavingsCents=Math.round(afterSamplerCents*volumeRate);
+ const totalCents=afterSamplerCents-volumeSavingsCents;
+ return {items,grossCents,samplerQty,samplerSavingsCents,afterSamplerCents,volumeRate,volumeSavingsCents,totalCents};
+}
 function calc(){
- let subtotal=0,items=0;
- for(const [key,q] of Object.entries(cart)){const v=products.flatMap(p=>p.variants).find(x=>x.id===key);if(!v)continue;items+=q;const price=v.unit_price_cents/100;subtotal+=q*price}
- const total=subtotal;
- document.getElementById('count').textContent=items+' items';document.getElementById('topTotal').textContent=money(total);document.getElementById('stickyCount').textContent=items;document.getElementById('stickyTotal').textContent=money(total);document.getElementById('subtotal').textContent=money(subtotal);document.getElementById('shipping').textContent=fulfillment==='pickup'?'$0.00':'Confirmed separately';document.getElementById('total').textContent=money(total);const submit=document.getElementById('submitOrder');if(submit)submit.disabled=!catalogReady||items===0
+ const p=calculatePricing();
+ document.getElementById('count').textContent=p.items+' items';document.getElementById('topTotal').textContent=money(p.totalCents/100);document.getElementById('stickyCount').textContent=p.items;document.getElementById('stickyTotal').textContent=money(p.totalCents/100);
+ document.getElementById('grossSubtotal').textContent=money(p.grossCents/100);
+ document.getElementById('samplerSavings').textContent='−'+money(p.samplerSavingsCents/100);
+ document.getElementById('subtotal').textContent=money(p.afterSamplerCents/100);
+ document.getElementById('volumeSavings').textContent='−'+money(p.volumeSavingsCents/100)+(p.volumeRate?' ('+(p.volumeRate*100)+'%)':'');
+ document.getElementById('shipping').textContent=fulfillment==='pickup'?'$0.00':'Confirmed separately';
+ document.getElementById('total').textContent=money(p.totalCents/100);
+ const submit=document.getElementById('submitOrder');if(submit)submit.disabled=!catalogReady||p.items===0
 }
 document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));applyFilter()}));
 document.querySelectorAll('[data-fulfillment]').forEach(b=>b.addEventListener('click',()=>{fulfillment=b.dataset.fulfillment;document.querySelectorAll('[data-fulfillment]').forEach(x=>x.classList.toggle('active',x===b));document.getElementById('pickupField').hidden=fulfillment!=='pickup';document.getElementById('shippingFields').hidden=fulfillment!=='shipping';document.getElementById('zipField').hidden=fulfillment!=='shipping';calc()}));
@@ -121,7 +140,7 @@ document.getElementById('orderForm').addEventListener('submit',async event=>{
   const disclaimer=document.createElement('p');
   disclaimer.className='muted';
   disclaimer.textContent='Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.';
-  resultBox.append(heading,number,amount,method,note,linkWrap,disclaimer);
+  resultBox.append(heading,number,amount,savings,method,note,linkWrap,disclaimer);
   resultBox.hidden=false;
   Object.keys(cart).forEach(k=>delete cart[k]);
   render();
