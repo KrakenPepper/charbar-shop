@@ -124,7 +124,95 @@ document.getElementById('orderForm').addEventListener('submit',async event=>{
   const number=document.createElement('p');
   number.textContent='Order number: '+String(data.order_number||'');
   const amount=document.createElement('p');
-  amount.textContent='Product subtotal: $'+(Number(data.total_cents||0)/100).toFixed(2);
+  amount.textContent='Product total: 
+  const paymentLabel=payload.payment_method==='venmo'?'Venmo':'Cash App';
+  method.textContent='Payment method: '+paymentLabel;
+  const note=document.createElement('p');
+  note.textContent=String(data.payment_due_note||'CharBar will send payment instructions.');
+  const link=document.createElement('a');
+  link.href=payload.payment_method==='venmo'?'https://venmo.com/u/krakenpepper':'https://cash.app/$krakenpepper';
+  link.target='_blank';
+  link.rel='noopener noreferrer';
+  link.textContent='Open '+paymentLabel+' payment profile';
+  const linkWrap=document.createElement('p');
+  linkWrap.append(link);
+  const disclaimer=document.createElement('p');
+  disclaimer.className='muted';
+  disclaimer.textContent='Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.';
+  resultBox.append(heading,number,amount,savings,method,note,linkWrap,disclaimer);
+  resultBox.hidden=false;
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  render();
+  button.textContent='Order request submitted';
+ }catch(err){
+  console.error(err);
+  errorBox.textContent=err.message||'Unable to submit your order. Please try again.';
+  button.disabled=false;
+  button.textContent='Submit order request';
+ }
+});
+</script></body></html>
++(Number(data.total_cents||0)/100).toFixed(2);
+  const savings=document.createElement('p');
+  const samplerSaved=(Number(data.sampler_discount_cents||0)/100).toFixed(2);
+  const volumeSaved=(Number(data.volume_discount_cents||0)/100).toFixed(2);
+  savings.textContent='Discounts applied: 
+  const paymentLabel=payload.payment_method==='venmo'?'Venmo':'Cash App';
+  method.textContent='Payment method: '+paymentLabel;
+  const note=document.createElement('p');
+  note.textContent=String(data.payment_due_note||'CharBar will send payment instructions.');
+  const link=document.createElement('a');
+  link.href=payload.payment_method==='venmo'?'https://venmo.com/u/krakenpepper':'https://cash.app/$krakenpepper';
+  link.target='_blank';
+  link.rel='noopener noreferrer';
+  link.textContent='Open '+paymentLabel+' payment profile';
+  const linkWrap=document.createElement('p');
+  linkWrap.append(link);
+  const disclaimer=document.createElement('p');
+  disclaimer.className='muted';
+  disclaimer.textContent='Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.';
+  resultBox.append(heading,number,amount,savings,method,note,linkWrap,disclaimer);
+  resultBox.hidden=false;
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  render();
+  button.textContent='Order request submitted';
+ }catch(err){
+  console.error(err);
+  errorBox.textContent=err.message||'Unable to submit your order. Please try again.';
+  button.disabled=false;
+  button.textContent='Submit order request';
+ }
+});
+</script></body></html>
++samplerSaved+' sampler savings and 
+  const paymentLabel=payload.payment_method==='venmo'?'Venmo':'Cash App';
+  method.textContent='Payment method: '+paymentLabel;
+  const note=document.createElement('p');
+  note.textContent=String(data.payment_due_note||'CharBar will send payment instructions.');
+  const link=document.createElement('a');
+  link.href=payload.payment_method==='venmo'?'https://venmo.com/u/krakenpepper':'https://cash.app/$krakenpepper';
+  link.target='_blank';
+  link.rel='noopener noreferrer';
+  link.textContent='Open '+paymentLabel+' payment profile';
+  const linkWrap=document.createElement('p');
+  linkWrap.append(link);
+  const disclaimer=document.createElement('p');
+  disclaimer.className='muted';
+  disclaimer.textContent='Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.';
+  resultBox.append(heading,number,amount,savings,method,note,linkWrap,disclaimer);
+  resultBox.hidden=false;
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  render();
+  button.textContent='Order request submitted';
+ }catch(err){
+  console.error(err);
+  errorBox.textContent=err.message||'Unable to submit your order. Please try again.';
+  button.disabled=false;
+  button.textContent='Submit order request';
+ }
+});
+</script></body></html>
++volumeSaved+' volume savings.';
   const method=document.createElement('p');
   const paymentLabel=payload.payment_method==='venmo'?'Venmo':'Cash App';
   method.textContent='Payment method: '+paymentLabel;
