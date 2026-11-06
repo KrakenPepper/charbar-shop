@@ -43,7 +43,7 @@ begin
   if p_customer_email !~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$' then raise exception 'Please enter a valid email address.'; end if;
   if length(regexp_replace(coalesce(p_customer_phone,''),'[^0-9]','','g')) < 10 then raise exception 'Please enter a valid phone number.'; end if;
   if p_fulfillment_method not in ('shipping','pickup') then raise exception 'Invalid fulfillment method.'; end if;
-  if p_fulfillment_method = 'pickup' and p_pickup_location not in (
+  if p_fulfillment_method = 'pickup' and coalesce(p_pickup_location, '') not in (
     'Hartford pickup — 2940 Main St, Hartford, CT 06120',
     'Plainville pickup — 60 Johnson Ave, Plainville, CT 06062'
   ) then raise exception 'Please choose a valid pickup location.'; end if;
