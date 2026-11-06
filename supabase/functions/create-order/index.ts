@@ -50,6 +50,7 @@ Deno.serve(async (req) => {
       p_fulfillment_method: body.fulfillment_method,
       p_shipping_address: address,
       p_postal_code: body.fulfillment_method === "shipping" ? String(body.postal_code || "").trim() : null,
+      p_pickup_location: body.fulfillment_method === "pickup" ? String(body.pickup_location || "") : null,
       p_payment_method: body.payment_method,
       p_items: normalizedItems,
     });
@@ -67,6 +68,7 @@ Deno.serve(async (req) => {
       sampler_discount_cents: order.sampler_discount_cents,
       volume_discount_cents: order.volume_discount_cents,
       total_cents: order.total_cents,
+      pickup_location: order.pickup_location,
       payment_method: body.payment_method,
       payment_url: body.payment_method === "venmo"
         ? "https://venmo.com/u/krakenpepper"
