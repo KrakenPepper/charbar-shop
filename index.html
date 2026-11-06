@@ -55,7 +55,7 @@ function calculatePricing(){
  const volumeRate=afterSamplerCents>10000?0.15:afterSamplerCents>5000?0.05:0;
  const volumeSavingsCents=Math.round(afterSamplerCents*volumeRate);
  const productTotalCents=afterSamplerCents-volumeSavingsCents;
- const shippingCents=fulfillment==='pickup'?0:(productTotalCents<=4900?1150:(productTotalCents<=15000?0:4000));
+ const shippingCents=fulfillment==='pickup'?0:(productTotalCents<=4999?1150:(productTotalCents<=15000?0:4000));
  const totalCents=productTotalCents+shippingCents;
  return {items,grossCents,samplerQty,samplerSavingsCents,afterSamplerCents,volumeRate,volumeSavingsCents,productTotalCents,shippingCents,totalCents};
 }
