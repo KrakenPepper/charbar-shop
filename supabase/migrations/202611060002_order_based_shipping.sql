@@ -136,7 +136,7 @@ begin
   -- Shipping uses the final product total after both discounts.
   v_product_total := v_after_sampler - v_volume_discount;
   if p_fulfillment_method = 'shipping' then
-    if v_product_total <= 4900 then
+    if v_product_total <= 4999 then
       v_shipping := 1150;
     elsif v_product_total <= 15000 then
       v_shipping := 0;
