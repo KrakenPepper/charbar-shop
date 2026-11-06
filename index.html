@@ -8,7 +8,7 @@
 :root{color-scheme:dark;--bg:#101012;--card:#1b1b20;--line:#33333b;--text:#f7f5f1;--muted:#aaa8b0;--accent:#f28a32;--green:#45c58b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:760px;margin:auto;padding:22px 15px 110px}header{text-align:center;padding:22px 0 18px}h1{font-size:34px;letter-spacing:.16em;margin:0}header p{color:var(--muted);margin:4px 0}.notice{margin:14px 0;padding:12px 14px;border:1px solid #79501f;background:#3a2817;border-radius:10px;color:#ffd7a7;font-size:13px}.bar{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px;color:var(--muted);font-size:14px}.filters{display:flex;gap:8px;overflow:auto;padding:4px 0 12px}.filters button,.size button,.step button{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:20px;padding:9px 13px;white-space:nowrap}.filters button.active{background:var(--text);color:var(--bg)}h2{font-size:18px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:8px;margin:24px 0 12px}.grid{display:grid;gap:11px}.product,.summary{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:15px}.product-top{display:flex;justify-content:space-between;gap:10px}.product h3{font-size:16px;margin:0}.heat{font-size:11px;color:#ffd19a;white-space:nowrap}.desc{color:var(--muted);font-size:13px;margin:6px 0 10px}.size{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:10px 0 0;margin-top:8px;font-size:14px}.step{display:flex;align-items:center;gap:10px}.step button{width:34px;height:34px;padding:0;border-radius:8px;font-size:19px}.step button:disabled{opacity:.3}.qty{min-width:18px;text-align:center}.summary{margin-top:20px}.summary h2{margin-top:0}.choice{display:flex;gap:8px}.choice button{flex:1;padding:12px;border:1px solid var(--line);border-radius:9px;background:#222228;color:var(--text)}.choice button.active{border-color:var(--accent);background:#4a2c18}.field{margin-top:13px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;background:#111115;color:var(--text)}.totals div{display:flex;justify-content:space-between;margin:9px 0;color:var(--muted)}.totals .grand{border-top:1px solid var(--line);padding-top:12px;color:var(--text);font-size:19px;font-weight:800}.checkout{width:100%;padding:14px;margin-top:14px;border:0;border-radius:10px;background:#555;color:#ddd;font-weight:800}.muted{color:var(--muted);font-size:12px}.order-form{border-top:1px solid var(--line);margin-top:16px;padding-top:12px}.order-form h3{font-size:15px;margin:14px 0 6px}.order-form .field{margin-top:10px}.pay-choice{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pay-choice label{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:12px;background:#111115;color:var(--text)}.pay-choice input{accent-color:var(--accent)}.checkout:not(:disabled){background:var(--accent);color:#17100a;cursor:pointer}.checkout:disabled{opacity:.55}.order-result{margin-top:14px;padding:14px;border:1px solid #276b4d;border-radius:10px;background:#14251d}.order-result a{color:#ffd19a;font-weight:700}.error{color:#ffb3a8}.sticky{position:fixed;bottom:14px;right:14px;background:var(--accent);color:#17100a;padding:12px 16px;border:0;border-radius:28px;font-weight:800;box-shadow:0 4px 20px #0008}@media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
 </style></head>
 <body><main><header><h1>CHARBAR</h1><p>SMALL BATCH • BIG FLAVOR</p><p class="muted">KRAKEN HOT SAUCE & PEPPER JAM</p></header>
-<div class="notice"><strong>Order requests:</strong> submit your cart and choose Venmo or Cash App. Payment is manual and your order is not confirmed until CharBar verifies payment. Shipping cost, if applicable, will be confirmed separately before you pay.</div>
+<div class="notice"><strong>Order requests:</strong> submit your cart and choose Venmo or Cash App. Payment is manual and your order is not confirmed until CharBar verifies payment. The applicable shipping charge is calculated automatically and included in your order total.</div>
 <div id="dbStatus" class="connection" role="status">Checking Supabase connection…</div>
 <div class="bar"><span id="count">0 items</span><strong id="topTotal">$0.00</strong></div>
 <nav class="filters" aria-label="Heat level filters"><button class="active" data-filter="all">All flavors</button><button data-filter="mild">Mild</button><button data-filter="medium">Medium</button><button data-filter="hot">Hot</button></nav>
@@ -16,7 +16,7 @@
 <section class="summary"><h2>Your Cart</h2><div class="choice"><button class="active" data-fulfillment="shipping" type="button">Shipping</button><button data-fulfillment="pickup" type="button">Local pickup (CT)</button></div>
 <div class="field" id="zipField"><label for="zip">ZIP code</label><input id="zip" inputmode="numeric" maxlength="10" placeholder="ZIP code"></div>
 <div class="field" id="pickupField" hidden><label for="pickup">Pickup location</label><select id="pickup" required><option value="Hartford pickup — 2940 Main St, Hartford, CT 06120">Hartford — 2940 Main St, Hartford, CT 06120</option><option value="Plainville pickup — 60 Johnson Ave, Plainville, CT 06062">Plainville — 60 Johnson Ave, Plainville, CT 06062</option></select><p class="muted">Choose the location where you would like to pick up your order.</p></div>
-<div class="totals"><div><span>Items before sampler deal</span><strong id="grossSubtotal">$0.00</strong></div><div><span>3-for-$12 sampler savings</span><strong id="samplerSavings">−$0.00</strong></div><div><span>Subtotal after sampler deal</span><strong id="subtotal">$0.00</strong></div><div><span>Automatic order discount</span><strong id="volumeSavings">−$0.00</strong></div><div><span>Shipping</span><strong id="shipping">Confirmed separately</strong></div><div class="grand"><span>Product total due</span><strong id="total">$0.00</strong></div></div>
+<div class="totals"><div><span>Items before sampler deal</span><strong id="grossSubtotal">$0.00</strong></div><div><span>3-for-$12 sampler savings</span><strong id="samplerSavings">−$0.00</strong></div><div><span>Subtotal after sampler deal</span><strong id="subtotal">$0.00</strong></div><div><span>Automatic order discount</span><strong id="volumeSavings">−$0.00</strong></div><div><span>Shipping</span><strong id="shipping">Confirmed separately</strong></div><div class="grand"><span>Order total</span><strong id="total">$0.00</strong></div></div>
 <form id="orderForm" class="order-form">
 <h3>Contact information</h3>
 <div class="field"><label for="customerName">Full name *</label><input id="customerName" autocomplete="name" required maxlength="120"></div>
@@ -54,8 +54,10 @@ function calculatePricing(){
  const afterSamplerCents=grossCents-samplerSavingsCents;
  const volumeRate=afterSamplerCents>10000?0.15:afterSamplerCents>5000?0.05:0;
  const volumeSavingsCents=Math.round(afterSamplerCents*volumeRate);
- const totalCents=afterSamplerCents-volumeSavingsCents;
- return {items,grossCents,samplerQty,samplerSavingsCents,afterSamplerCents,volumeRate,volumeSavingsCents,totalCents};
+ const productTotalCents=afterSamplerCents-volumeSavingsCents;
+ const shippingCents=fulfillment==='pickup'?0:(productTotalCents<=4900?1150:(productTotalCents<=15000?0:4000));
+ const totalCents=productTotalCents+shippingCents;
+ return {items,grossCents,samplerQty,samplerSavingsCents,afterSamplerCents,volumeRate,volumeSavingsCents,productTotalCents,shippingCents,totalCents};
 }
 function calc(){
  const p=calculatePricing();
@@ -64,7 +66,7 @@ function calc(){
  document.getElementById('samplerSavings').textContent='−'+money(p.samplerSavingsCents/100);
  document.getElementById('subtotal').textContent=money(p.afterSamplerCents/100);
  document.getElementById('volumeSavings').textContent='−'+money(p.volumeSavingsCents/100)+(p.volumeRate?' ('+(p.volumeRate*100)+'%)':'');
- document.getElementById('shipping').textContent=fulfillment==='pickup'?'$0.00':'Confirmed separately';
+ document.getElementById('shipping').textContent=money(p.shippingCents/100);
  document.getElementById('total').textContent=money(p.totalCents/100);
  const submit=document.getElementById('submitOrder');if(submit)submit.disabled=!catalogReady||p.items===0
 }
@@ -125,7 +127,124 @@ document.getElementById('orderForm').addEventListener('submit',async event=>{
   const number=document.createElement('p');
   number.textContent='Order number: '+String(data.order_number||'');
   const amount=document.createElement('p');
-  amount.textContent='Product total: $'+(Number(data.total_cents||0)/100).toFixed(2);
+  amount.textContent='Order total (including shipping): 
+  const shippingLine=document.createElement('p');
+  shippingLine.textContent='Shipping: (Number(data.sampler_discount_cents||0)/100).toFixed(2);
+  const volumeSaved=(Number(data.volume_discount_cents||0)/100).toFixed(2);
+  savings.textContent='Discounts applied: $'+samplerSaved+' sampler savings and $'+volumeSaved+' volume savings.';
+  const method=document.createElement('p');
+  const paymentLabel=payload.payment_method==='venmo'?'Venmo':'Cash App';
+  method.textContent='Payment method: '+paymentLabel;
+  const note=document.createElement('p');
+  note.textContent=String(data.payment_due_note||'CharBar will send payment instructions.');
+  const link=document.createElement('a');
+  link.href=payload.payment_method==='venmo'?'https://venmo.com/u/krakenpepper':'https://cash.app/$krakenpepper';
+  link.target='_blank';
+  link.rel='noopener noreferrer';
+  link.textContent='Open '+paymentLabel+' payment profile';
+  const linkWrap=document.createElement('p');
+  linkWrap.append(link);
+  const disclaimer=document.createElement('p');
+  disclaimer.className='muted';
+  disclaimer.textContent='Please wait for CharBar to confirm your order before paying. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.';
+  if(fulfillment==='pickup'){
+   const pickupInfo=document.createElement('p');
+   pickupInfo.textContent='Pickup location: '+String(data.pickup_location||payload.pickup_location);
+   resultBox.append(heading,number,amount,shippingLine,savings,pickupInfo,method,note,linkWrap,disclaimer);
+  }else{
+   resultBox.append(heading,number,amount,shippingLine,savings,method,note,linkWrap,disclaimer);
+  }
+  resultBox.hidden=false;
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  render();
+  button.textContent='Order request submitted';
+ }catch(err){
+  console.error(err);
+  errorBox.textContent=err.message||'Unable to submit your order. Please try again.';
+  button.disabled=false;
+  button.textContent='Submit order request';
+ }
+});
+</script></body></html>
++(Number(data.total_cents||0)/100).toFixed(2);
+  const savings=document.createElement('p');
+  const samplerSaved=(Number(data.sampler_discount_cents||0)/100).toFixed(2);
+  const volumeSaved=(Number(data.volume_discount_cents||0)/100).toFixed(2);
+  savings.textContent='Discounts applied: $'+samplerSaved+' sampler savings and $'+volumeSaved+' volume savings.';
+  const method=document.createElement('p');
+  const paymentLabel=payload.payment_method==='venmo'?'Venmo':'Cash App';
+  method.textContent='Payment method: '+paymentLabel;
+  const note=document.createElement('p');
+  note.textContent=String(data.payment_due_note||'CharBar will send payment instructions.');
+  const link=document.createElement('a');
+  link.href=payload.payment_method==='venmo'?'https://venmo.com/u/krakenpepper':'https://cash.app/$krakenpepper';
+  link.target='_blank';
+  link.rel='noopener noreferrer';
+  link.textContent='Open '+paymentLabel+' payment profile';
+  const linkWrap=document.createElement('p');
+  linkWrap.append(link);
+  const disclaimer=document.createElement('p');
+  disclaimer.className='muted';
+  disclaimer.textContent='Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.';
+  if(fulfillment==='pickup'){
+   const pickupInfo=document.createElement('p');
+   pickupInfo.textContent='Pickup location: '+String(data.pickup_location||payload.pickup_location);
+   resultBox.append(heading,number,amount,savings,pickupInfo,method,note,linkWrap,disclaimer);
+  }else{
+   resultBox.append(heading,number,amount,savings,method,note,linkWrap,disclaimer);
+  }
+  resultBox.hidden=false;
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  render();
+  button.textContent='Order request submitted';
+ }catch(err){
+  console.error(err);
+  errorBox.textContent=err.message||'Unable to submit your order. Please try again.';
+  button.disabled=false;
+  button.textContent='Submit order request';
+ }
+});
+</script></body></html>
++(Number(data.shipping_cents||0)/100).toFixed(2);
+  const savings=document.createElement('p');
+  const samplerSaved=(Number(data.sampler_discount_cents||0)/100).toFixed(2);
+  const volumeSaved=(Number(data.volume_discount_cents||0)/100).toFixed(2);
+  savings.textContent='Discounts applied: $'+samplerSaved+' sampler savings and $'+volumeSaved+' volume savings.';
+  const method=document.createElement('p');
+  const paymentLabel=payload.payment_method==='venmo'?'Venmo':'Cash App';
+  method.textContent='Payment method: '+paymentLabel;
+  const note=document.createElement('p');
+  note.textContent=String(data.payment_due_note||'CharBar will send payment instructions.');
+  const link=document.createElement('a');
+  link.href=payload.payment_method==='venmo'?'https://venmo.com/u/krakenpepper':'https://cash.app/$krakenpepper';
+  link.target='_blank';
+  link.rel='noopener noreferrer';
+  link.textContent='Open '+paymentLabel+' payment profile';
+  const linkWrap=document.createElement('p');
+  linkWrap.append(link);
+  const disclaimer=document.createElement('p');
+  disclaimer.className='muted';
+  disclaimer.textContent='Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.';
+  if(fulfillment==='pickup'){
+   const pickupInfo=document.createElement('p');
+   pickupInfo.textContent='Pickup location: '+String(data.pickup_location||payload.pickup_location);
+   resultBox.append(heading,number,amount,savings,pickupInfo,method,note,linkWrap,disclaimer);
+  }else{
+   resultBox.append(heading,number,amount,savings,method,note,linkWrap,disclaimer);
+  }
+  resultBox.hidden=false;
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  render();
+  button.textContent='Order request submitted';
+ }catch(err){
+  console.error(err);
+  errorBox.textContent=err.message||'Unable to submit your order. Please try again.';
+  button.disabled=false;
+  button.textContent='Submit order request';
+ }
+});
+</script></body></html>
++(Number(data.total_cents||0)/100).toFixed(2);
   const savings=document.createElement('p');
   const samplerSaved=(Number(data.sampler_discount_cents||0)/100).toFixed(2);
   const volumeSaved=(Number(data.volume_discount_cents||0)/100).toFixed(2);
