@@ -67,6 +67,8 @@ Deno.serve(async (req) => {
       subtotal_cents: order.subtotal_cents,
       sampler_discount_cents: order.sampler_discount_cents,
       volume_discount_cents: order.volume_discount_cents,
+      shipping_cents: order.shipping_cents,
+      product_total_cents: Number(order.total_cents) - Number(order.shipping_cents || 0),
       total_cents: order.total_cents,
       pickup_location: order.pickup_location,
       payment_method: body.payment_method,
@@ -74,8 +76,8 @@ Deno.serve(async (req) => {
         ? "https://venmo.com/u/krakenpepper"
         : "https://cash.app/$krakenpepper",
       payment_due_note: body.fulfillment_method === "shipping"
-        ? "Shipping cost has not been added. CharBar will confirm shipping and the final amount before payment."
-        : "Please pay the product total shown. Your pickup arrangements will be confirmed by CharBar.",
+        ? "The shipping charge is included in the order total. Please wait for CharBar to confirm your order before paying."
+        : "No shipping charge applies to local pickup. CharBar will confirm your pickup arrangements.",
       expires_in_hours: 24,
     });
   } catch (error) {
