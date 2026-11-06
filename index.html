@@ -15,7 +15,7 @@
 <h2>Kraken Hot Sauces</h2><div class="grid" id="sauces"></div><h2>Kraken Pepper Jams</h2><div class="grid" id="jams"></div>
 <section class="summary"><h2>Your Cart</h2><div class="choice"><button class="active" data-fulfillment="shipping" type="button">Shipping</button><button data-fulfillment="pickup" type="button">Local pickup (CT)</button></div>
 <div class="field" id="zipField"><label for="zip">ZIP code</label><input id="zip" inputmode="numeric" maxlength="10" placeholder="ZIP code"></div>
-<div class="field" id="pickupField" hidden><label for="pickup">Pickup location</label><select id="pickup"><option value="Hartford, CT">Hartford, CT</option><option value="Plainville, CT">Plainville, CT</option></select><p class="muted">Pickup location options are provisional and will be confirmed by CharBar.</p></div>
+<div class="field" id="pickupField" hidden><label for="pickup">Pickup location</label><select id="pickup" required><option value="Hartford pickup — 2940 Main St, Hartford, CT 06120">Hartford — 2940 Main St, Hartford, CT 06120</option><option value="Plainville pickup — 60 Johnson Ave, Plainville, CT 06062">Plainville — 60 Johnson Ave, Plainville, CT 06062</option></select><p class="muted">Choose the location where you would like to pick up your order.</p></div>
 <div class="totals"><div><span>Items before sampler deal</span><strong id="grossSubtotal">$0.00</strong></div><div><span>3-for-$12 sampler savings</span><strong id="samplerSavings">−$0.00</strong></div><div><span>Subtotal after sampler deal</span><strong id="subtotal">$0.00</strong></div><div><span>Automatic order discount</span><strong id="volumeSavings">−$0.00</strong></div><div><span>Shipping</span><strong id="shipping">Confirmed separately</strong></div><div class="grand"><span>Product total due</span><strong id="total">$0.00</strong></div></div>
 <form id="orderForm" class="order-form">
 <h3>Contact information</h3>
@@ -103,6 +103,7 @@ document.getElementById('orderForm').addEventListener('submit',async event=>{
   customer_phone:document.getElementById('customerPhone').value.trim(),
   fulfillment_method:fulfillment,
   payment_method:document.querySelector('input[name="paymentMethod"]:checked').value,
+  pickup_location:fulfillment==='pickup'?document.getElementById('pickup').value:null,
   items,
   address1:document.getElementById('address1').value.trim(),
   address2:document.getElementById('address2').value.trim(),
@@ -144,7 +145,13 @@ document.getElementById('orderForm').addEventListener('submit',async event=>{
   const disclaimer=document.createElement('p');
   disclaimer.className='muted';
   disclaimer.textContent='Please do not pay until CharBar confirms the final amount, especially for shipping. Your stock reservation expires in 24 hours. This is a pending request, not a paid order.';
-  resultBox.append(heading,number,amount,savings,method,note,linkWrap,disclaimer);
+  if(fulfillment==='pickup'){
+   const pickupInfo=document.createElement('p');
+   pickupInfo.textContent='Pickup location: '+String(data.pickup_location||payload.pickup_location);
+   resultBox.append(heading,number,amount,savings,pickupInfo,method,note,linkWrap,disclaimer);
+  }else{
+   resultBox.append(heading,number,amount,savings,method,note,linkWrap,disclaimer);
+  }
   resultBox.hidden=false;
   Object.keys(cart).forEach(k=>delete cart[k]);
   render();
